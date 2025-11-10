@@ -42,7 +42,7 @@ const Login = (props) => {
         <div className="login-box-imag">
           <img src={logo} alt="" />
         </div>
-        <h4>Login</h4>
+        {/* <h4>Login</h4> */}
         <form onSubmit={handleSubmit}>
           <div className="user-box">
             <label htmlFor="email">Email</label>
@@ -74,7 +74,7 @@ const Login = (props) => {
       <div
         className="modal-backdrop"
         // onClick={closeModal}
-        style={{ background: "#fff7f1" }}
+        style={{ background: "#2C2C2C" }}
       ></div>
     </div>
   );
