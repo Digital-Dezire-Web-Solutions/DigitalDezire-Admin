@@ -1,24 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import ContextState from "./Context/ContextState";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Login from "./Pages/Login/Login";
+import Blog from "./Pages/Blog/Blog";
+import AddBlog from "./Pages/Blog/AddItem";
+import EditItem from "./Pages/Blog/EditItem";
+import Sidenav from "./Component/Sidenav/Sidenav";
+import Topbar from "./Component/Sidenav/Topbar";
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ContextState>
+      <Router>
+        <div className="App">
+        <Sidenav />
+          <div className="content">
+            <Topbar />
+            <Routes>
+              <Route path="/blog" exact element={<Blog />} />
+              <Route path="/blog/add" exact element={<AddBlog />} />
+              <Route path="/blog/edit/:id" exact element={<EditItem />} />
+              <Route path="/login" exact element={<Login />} />
+            </Routes>
+          </div>
+        </div>
+      </Router>
+    </ContextState>
   );
 }
 

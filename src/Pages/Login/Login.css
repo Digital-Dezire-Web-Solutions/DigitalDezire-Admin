@@ -1,0 +1,41 @@
+.login-box{
+    z-index: 1051;
+    background-color: white;
+    border-radius: 8px;
+    padding: 1rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+    text-align: center;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.login-box-imag img{
+    width: 20%;
+    object-fit: cover;
+}
+
+.user-box{
+    display: flex;
+    align-content: center;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+.user-box input{
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    background-color: #fbd5d5;
+}
+.user-box label{
+   text-align: start;
+   margin-bottom: 5px;
+}
+
+.login-box button{
+    width: 100%;
+    padding: 10px;
+    margin-top: 1rem;
+}
