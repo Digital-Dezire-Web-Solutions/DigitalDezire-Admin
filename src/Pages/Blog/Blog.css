@@ -297,3 +297,8 @@ form input {
     justify-content: space-between;
     gap: 1rem;
 }
+
+.product-description.blog img{
+    width: 100%;
+    object-fit: cover;
+}

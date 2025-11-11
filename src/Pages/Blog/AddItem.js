@@ -17,7 +17,6 @@ const AddItem = ({ blogToEdit }) => {
   const [image, setImage] = useState(null);
   const [thumbnail1, setThumbnail1] = useState(null);
   const [thumbnail2, setThumbnail2] = useState(null);
-  const [thumbnail3, setThumbnail3] = useState(null);
 
   const editor = useEditor({
     extensions: [
@@ -45,7 +44,6 @@ const AddItem = ({ blogToEdit }) => {
     if (image) formData.append("image", image);
     if (thumbnail1) formData.append("thumbnail1", thumbnail1);
     if (thumbnail2) formData.append("thumbnail2", thumbnail2);
-    if (thumbnail3) formData.append("thumbnail3", thumbnail3);
 
     const url = blogToEdit
       ? `${Host}/api/blog/edit/${blogToEdit._id}`
@@ -262,20 +260,16 @@ const AddItem = ({ blogToEdit }) => {
         </div>
         <div className="blog-image-box">
           <div className="frm-input-box">
-            <label htmlFor="image">Image</label>
+            <label htmlFor="image">Image (820 X 410 px - less then 10 mb)</label>
             <input type="file" onChange={(e) => setImage(e.target.files[0])} />
           </div>
           <div className="frm-input-box">
-            <label htmlFor="image">Thumbnail1</label>
+            <label htmlFor="image">Thumbnail1 (230 X 280 px - less then 10 mb)</label>
             <input type="file" onChange={(e) => setThumbnail1(e.target.files[0])} />
           </div>
           <div className="frm-input-box">
-            <label htmlFor="image">Thumbnail2</label>
+            <label htmlFor="image">Thumbnail2 (380 X 300 px - less then 10 mb)</label>
             <input type="file" onChange={(e) => setThumbnail2(e.target.files[0])} />
-          </div>
-          <div className="frm-input-box">
-            <label htmlFor="image">Thumbnail3</label>
-            <input type="file" onChange={(e) => setThumbnail3(e.target.files[0])} />
           </div>
         </div>
 
