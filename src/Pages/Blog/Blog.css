@@ -236,6 +236,7 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 }
+form textarea  ,
 form input {
   padding: 10px;
   border-radius: 8px;
@@ -301,4 +302,92 @@ form input {
 .product-description.blog img{
     width: 100%;
     object-fit: cover;
+}
+
+.seo-check-btn {
+  cursor: pointer;
+  padding: 10px;
+  margin-right: 1rem;
+}
+
+.seo-result {
+  background: #f8f9fa;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.google-preview-box {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 10px 0;
+  font-family: Arial, sans-serif;
+  width: 50%;
+}
+.g-url {
+  color: #006621;
+  font-size: 14px;
+}
+.g-title {
+  color: #1a0dab;
+  font-size: 18px;
+  margin: 3px 0;
+}
+.g-desc {
+  color: #545454;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.seo-score-box {
+  width: 50%;
+  margin-top: 15px;
+  background: #fafafa;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.progress-bar {
+  width: 100%;
+  background: #e0e0e0;
+  height: 10px;
+  border-radius: 10px;
+  margin: 5px 0;
+  overflow: hidden;
+}
+.progress {
+  height: 10px;
+  border-radius: 10px;
+  transition: width 0.5s ease;
+}
+
+.blog-detail-seo-box{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.google-pre-box{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 10px;
+}
+.google-pre-box img{
+  width: 40px;
+  height: 40px;
+  aspect-ratio: 2/2;
+  object-fit: contain;
+  border-radius: 50px;
+}
+
+.google-pre-content h4{
+  font-size: 14px;
+  margin: 0;
+}
+.google-pre-content p{
+  font-size: 12px;
+  margin: 0;
 }

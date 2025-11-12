@@ -10,6 +10,7 @@ import OrderedList from "@tiptap/extension-ordered-list";
 import Blockquote from "@tiptap/extension-blockquote";
 import CodeBlock from "@tiptap/extension-code-block";
 import Host from "../../Host/Host";
+import logo from "../../Assets/logo.png";
 
 const AddItem = ({ blogToEdit }) => {
   const [title, setTitle] = useState(blogToEdit?.title || "");
@@ -17,6 +18,10 @@ const AddItem = ({ blogToEdit }) => {
   const [image, setImage] = useState(null);
   const [thumbnail1, setThumbnail1] = useState(null);
   const [thumbnail2, setThumbnail2] = useState(null);
+  const [imageAlt, setImageAlt] = useState(blogToEdit?.imageAlt || ""); // New Alt Text input
+  const [keyword, setKeyword] = useState(blogToEdit?.keyword || ""); // New keyword input
+  const [seoScore, setSeoScore] = useState(null);
+  const [seoSuggestions, setSeoSuggestions] = useState([]);
 
   const editor = useEditor({
     extensions: [
@@ -33,6 +38,91 @@ const AddItem = ({ blogToEdit }) => {
     content: blogToEdit?.content || "<p>Write your blog here...</p>",
   });
 
+
+  // SEO Checker
+  const handleCheckSEO = () => {
+    if (!editor) return;
+    const content = editor.getHTML();
+    const plainText = editor.getText();
+    const suggestions = [];
+    let score = 0;
+
+    // 1️⃣ Title length
+    if (title.length >= 50 && title.length <= 60) score += 15;
+    else suggestions.push("Title should be between 50–60 characters.");
+
+    // 2️⃣ Description length
+    if (description.length >= 120 && description.length <= 160) score += 15;
+    else suggestions.push("Description should be between 120–160 characters.");
+
+    // 3️⃣ Keyword checks
+    if (keyword) {
+      const k = keyword.toLowerCase();
+      if (title.toLowerCase().includes(k)) score += 10;
+      else suggestions.push("Keyword missing in title.");
+
+      if (description.toLowerCase().includes(k)) score += 10;
+      else suggestions.push("Keyword missing in description.");
+
+      if (plainText.slice(0, 300).toLowerCase().includes(k)) score += 10;
+      else suggestions.push("Keyword not found in first paragraph.");
+    } else {
+      suggestions.push("Add a focus keyword for better analysis.");
+    }
+
+    // 4️⃣ H1 Tag
+    if (content.includes("<h1")) score += 10;
+    else suggestions.push("Add at least one H1 tag.");
+
+    // 5️⃣ Image & Alt
+    if (content.includes("<img")) {
+      score += 5;
+      if (content.includes("alt=")) score += 5;
+      else suggestions.push("Add alt text to images.");
+    } else {
+      suggestions.push("Add at least one image.");
+    }
+
+    // 6️⃣ Content length
+    const wordCount = plainText.trim().split(/\s+/).length;
+    if (wordCount > 300) score += 10;
+    else suggestions.push("Add more content (minimum 300 words).");
+
+    setSeoScore(score);
+    setSeoSuggestions(suggestions);
+  };
+
+  // Progress Bar color
+  const getBarColor = () => {
+    if (seoScore >= 80) return "green";
+    if (seoScore >= 50) return "orange";
+    return "red";
+  };
+
+  // SEO Google Preview
+  const renderGooglePreview = () => {
+    const slug = title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
+    return (
+      <div className="google-preview">
+        <div className="google-pre-box">
+          <img src={logo} alt="" />
+          <div className="google-pre-content">
+            <h4>Digital Dezire Web Solutions</h4>
+            <p className="g-url">www.digitaldezire.com/blog/{slug}</p>
+          </div>
+        </div>
+        <h3 className="g-title">{title || "Your Blog Title"}</h3>
+        <p className="g-desc">
+          {description || "Your meta description will appear here."}
+        </p>
+      </div>
+    );
+  };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!editor) return;
@@ -40,6 +130,8 @@ const AddItem = ({ blogToEdit }) => {
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
+    formData.append("keyword", keyword);
+    formData.append("imageAlt", imageAlt);
     formData.append("content", editor.getHTML());
     if (image) formData.append("image", image);
     if (thumbnail1) formData.append("thumbnail1", thumbnail1);
@@ -62,6 +154,8 @@ const AddItem = ({ blogToEdit }) => {
       const data = await res.json();
       setTitle("");
       setDescription("");
+      setKeyword("");
+      setImageAlt("");
       setImage(null);
       editor.commands.setContent("<p>Write your blog here...</p>");
     } else {
@@ -86,7 +180,7 @@ const AddItem = ({ blogToEdit }) => {
       );
       const data = await res.json();
       if (data.secure_url) {
-        editor.chain().focus().setImage({ src: data.secure_url }).run();
+        editor.chain().focus().setImage({ src: data.secure_url, alt: imageAlt || "blog image" }).run();
       }
     };
   };
@@ -241,7 +335,7 @@ const AddItem = ({ blogToEdit }) => {
       </h3>
       <form onSubmit={handleSubmit}>
         <div className="frm-input-box">
-          <label htmlFor="title">Title</label>
+          <label htmlFor="title">Title (Meta)</label>
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -250,12 +344,29 @@ const AddItem = ({ blogToEdit }) => {
           />
         </div>
         <div className="frm-input-box">
-          <label htmlFor="description">Description</label>
-          <input
+          <label htmlFor="description">Description (Meta)</label>
+          <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Enter short description"
             required
+          />
+        </div>
+        <div className="frm-input-box">
+          <label>Focus Keyword</label>
+          <input
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            placeholder="Enter focus keyword"
+          />
+        </div>
+
+        <div className="frm-input-box">
+          <label>Image Alt Text</label>
+          <input
+            value={imageAlt}
+            onChange={(e) => setImageAlt(e.target.value)}
+            placeholder="Enter image alt text"
           />
         </div>
         <div className="blog-image-box">
@@ -287,6 +398,41 @@ const AddItem = ({ blogToEdit }) => {
           </div>
         </div>
 
+        {/* Google Search Preview */}
+        <div className="blog-detail-seo-box">
+          <div className="google-preview-box">{renderGooglePreview()}</div>
+          {/* SEO Score Section */}
+          {seoScore !== null && (
+            <div className="seo-score-box">
+              <h4>SEO Score: {seoScore}/100</h4>
+              <div className="progress-bar">
+                <div
+                  className="progress"
+                  style={{
+                    width: `${seoScore}%`,
+                    background: getBarColor(),
+                  }}
+                ></div>
+              </div>
+              {seoSuggestions.length > 0 ? (
+                <ul>
+                  {seoSuggestions.map((s, i) => (
+                    <li key={i}>{s}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p style={{ color: "green" }}>All SEO checks passed ✅</p>
+              )}
+            </div>
+          )}
+        </div>
+        <button
+          type="button"
+          onClick={handleCheckSEO}
+          className="seo-check-btn"
+        >
+          Check SEO Score
+        </button>
         <button className="product-add-btn" type="submit">{blogToEdit ? "Update" : "Add"} Blog</button>
       </form>
     </div>
